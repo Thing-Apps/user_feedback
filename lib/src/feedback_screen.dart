@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:user_feedback/l10n/app_localizations.dart';
+import 'package:user_feedback/l10n/l10n.dart';
 import 'package:user_feedback/src/add_user_feedback_request.dart';
 import 'package:user_feedback/src/feedback_category.dart';
 import 'package:user_feedback/src/feedback_service.dart';
 import 'package:uuid/uuid.dart';
 
-class FeedbackScreen extends StatefulWidget {
+class FeedbackScreen extends StatelessWidget {
   const FeedbackScreen({
     super.key,
     required this.feedbackService,
@@ -28,10 +30,47 @@ class FeedbackScreen extends StatefulWidget {
   final String? userId;
 
   @override
-  State<FeedbackScreen> createState() => _FeedbackScreenState();
+  Widget build(BuildContext context) {
+    return Material(
+      child: Localizations(
+        delegates: AppLocalizations.localizationsDelegates,
+        locale: Localizations.localeOf(context),
+        child: FeedbackView(
+          feedbackService: feedbackService,
+          appName: appName,
+          onCloseTap: onCloseTap,
+          onSendFinish: onSendFinish,
+          username: username,
+          userId: userId,
+        ),
+      ),
+    );
+  }
 }
 
-class _FeedbackScreenState extends State<FeedbackScreen> {
+class FeedbackView extends StatefulWidget {
+  const FeedbackView({
+    super.key,
+    required this.feedbackService,
+    required this.appName,
+    this.onCloseTap,
+    this.onSendFinish,
+    this.username,
+    this.userId,
+  });
+
+  final void Function(void)? onCloseTap;
+  final void Function(void)? onSendFinish;
+  final FeedbackService feedbackService;
+  final String appName;
+  final String? username;
+  final String? userId;
+
+  @override
+  State<FeedbackView> createState() => _FeedbackViewState();
+}
+
+class _FeedbackViewState extends State<FeedbackView> {
   final TextEditingController _textEditingController = TextEditingController();
 
   FeedbackCategory selectedCategory = FeedbackCategory.bug;
@@ -43,139 +82,127 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).dividerColor,
-      child: Stack(
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: Theme.of(context).cardColor,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (_isLoading)
-                  const LinearProgressIndicator()
-                else
-                  const SizedBox(height: 4),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      '의견 보내기',
-                      style: TextStyle(
-                        fontSize: 19,
-                        color: Theme.of(context).textTheme.displaySmall?.color,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Expanded(child: SizedBox()),
-                    IconButton(
-                      onPressed: () {
-                        widget.onCloseTap?.call(null);
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).textTheme.displaySmall?.color,
-                      ),
-                    ),
-                  ],
+          if (_isLoading)
+            const LinearProgressIndicator()
+          else
+            const SizedBox(height: 4),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              Text(
+                context.l10n.feedbackTitle,
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Theme.of(context).textTheme.displaySmall?.color,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: buildCategoryButton(
-                        context,
-                        category: FeedbackCategory.bug,
-                        isSelected: selectedCategory == FeedbackCategory.bug,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: buildCategoryButton(
-                        context,
-                        category: FeedbackCategory.enhancement,
-                        isSelected:
-                            selectedCategory == FeedbackCategory.enhancement,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                  ],
+              ),
+              const Expanded(child: SizedBox()),
+              IconButton(
+                onPressed: () {
+                  widget.onCloseTap?.call(null);
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Theme.of(context).textTheme.displaySmall?.color,
                 ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Scrollbar(
-                    thickness: 1,
-                    radius: const Radius.circular(1),
-                    child: ScrollConfiguration(
-                      behavior:
-                          const ScrollBehavior().copyWith(overscroll: false),
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: TextFormField(
-                          autofocus: true,
-                          minLines: 3,
-                          maxLines: 10,
-                          controller: _textEditingController,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    height: 1.5,
-                                  ),
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(16),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
-                            filled: true,
-                            // fillColor: Theme.of(context).canvasColor,
-                            hintText: '내용을 입력해주세요',
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  height: 1.5,
-                                  color: Theme.of(context).dividerColor,
-                                ),
-                          ),
-                          maxLength: 200,
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              Expanded(
+                child: buildCategoryButton(
+                  context,
+                  category: FeedbackCategory.bug,
+                  isSelected: selectedCategory == FeedbackCategory.bug,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: buildCategoryButton(
+                  context,
+                  category: FeedbackCategory.enhancement,
+                  isSelected: selectedCategory == FeedbackCategory.enhancement,
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Scrollbar(
+              thickness: 1,
+              radius: const Radius.circular(1),
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: TextFormField(
+                    autofocus: true,
+                    minLines: 3,
+                    maxLines: 10,
+                    controller: _textEditingController,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          height: 1.5,
                         ),
-                      ),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(16),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: true,
+                      // fillColor: Theme.of(context).canvasColor,
+                      hintText: context.l10n.bodyEditTextHint,
+                      hintStyle:
+                          Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                height: 1.5,
+                                color: Theme.of(context).dividerColor,
+                              ),
                     ),
+                    maxLength: 200,
                   ),
                 ),
-                const SizedBox(height: 12),
-                if (imageFileList.isNotEmpty)
-                  buildImageListView()
-                else
-                  const SizedBox(),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    buildImageAddButton(),
-                    const Expanded(child: SizedBox()),
-                    RoundedButton(
-                      child: Text(
-                        '작성하기',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                      ),
-                      onTap: _onSendTap,
-                    ),
-                    const SizedBox(width: 16),
-                  ],
-                ),
-                const SizedBox(height: 16),
-              ],
+              ),
             ),
           ),
+          const SizedBox(height: 12),
+          if (imageFileList.isNotEmpty)
+            buildImageListView()
+          else
+            const SizedBox(),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              buildImageAddButton(),
+              const Expanded(child: SizedBox()),
+              RoundedButton(
+                child: Text(
+                  context.l10n.sendButton,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                ),
+                onTap: _onSendTap,
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -185,7 +212,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return InkWell(
       onTap: () async {
         if (imageFileList.length == maxImages) {
-          await Fluttertoast.showToast(msg: '$maxImages개가 최대입니다.');
+          await Fluttertoast.showToast(
+            msg: context.l10n.maxImagesWarning(maxImages),
+          );
           return;
         }
         final newImages = await ImagePicker().pickMultiImage(
@@ -207,7 +236,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           // icon: SvgPicture.asset('assets/icons/add_photo_alternate.svg'),
 
           Text(
-            '사진 (${imageFileList.length}/$maxImages)',
+            context.l10n.imageCounter(imageFileList.length, maxImages),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
@@ -286,9 +315,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     var text = '';
     switch (category) {
       case FeedbackCategory.enhancement:
-        text = '🙏 서비스 제안';
+        text = context.l10n.enhancementButton;
       case FeedbackCategory.bug:
-        text = '🚨 오류 신고';
+        text = context.l10n.bugButton;
     }
     var contentColor = Theme.of(context).disabledColor;
     if (isSelected) {
@@ -327,7 +356,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
       final body = _textEditingController.text.trim();
       if (body.isEmpty) {
-        await Fluttertoast.showToast(msg: '내용을 입력 해주세요.');
+        await Fluttertoast.showToast(msg: context.l10n.emptyBodyWarning);
         return;
       }
       final fileList = imageFileList.map((e) => File(e.path)).toList();
@@ -350,10 +379,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           imageUrls: imageUrls,
         ),
       );
-      await Fluttertoast.showToast(msg: '완료');
+      await Fluttertoast.showToast(msg: context.l10n.complete);
     } catch (e, st) {
       log('send feedback failed: $e, $st');
-      await Fluttertoast.showToast(msg: '실패 했습니다.');
+      await Fluttertoast.showToast(msg: context.l10n.failWarning);
     } finally {
       setState(() {
         _isLoading = false;

@@ -2,5 +2,31 @@
   "@@locale": "en",
   "feedbackTitle": "Feedback",
   "enhancement": "Enhancement",
-  "bugReport": "Report bug"
+  "bugReport": "Report bug",
+  "bodyEditTextHint": "Input here",
+  "sendButton": "Send",
+  "maxImagesWarning": "Only max {maxImages} images can be uploaded.",
+  "@maxImagesWarning": {
+    "placeholders": {
+      "maxImages": {
+        "type": "int"
+      }
+    }
+  },
+  "imageCounter": "Images ({currentLength}/{maxImages})",
+  "@imageCounter": {
+    "placeholders": {
+      "currentLength": {
+        "type": "int"
+      },
+      "maxImages": {
+        "type": "int"
+      }
+    }
+  },
+  "enhancementButton" : "🙏 Enhancement",
+  "bugButton" : "🚨 Report bug",
+  "emptyBodyWarning" : "Please input text.",
+  "complete" : "Complete",
+  "failWarning" : "Something went wrong.\nPlease try again."
 }

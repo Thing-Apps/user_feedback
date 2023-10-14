@@ -1,6 +1,32 @@
 {
   "@@locale": "ko",
-  "feedbackTitle": "피드백",
+  "feedbackTitle": "의견 보내기",
   "enhancement": "서비스 제안",
-  "bugReport": "오류 신고"
+  "bugReport": "오류 신고",
+  "bodyEditTextHint": "내용을 입력해주세요",
+  "sendButton": "작성하기",
+  "maxImagesWarning": "사진은 {maxImages}개가 최대 입니다.",
+  "@maxImagesWarning": {
+    "placeholders": {
+      "maxImages": {
+        "type": "int"
+      }
+    }
+  },
+  "imageCounter": "사진 ({currentLength}/{maxImages})",
+  "@imageCounter": {
+    "placeholders": {
+      "currentLength": {
+        "type": "int"
+      },
+      "maxImages": {
+        "type": "int"
+      }
+    }
+  },
+  "enhancementButton" : "🙏 서비스 제안",
+  "bugButton" : "🚨 오류 신고",
+  "emptyBodyWarning" : "내용을 입력 해주세요.",
+  "complete" : "완료",
+  "failWarning" : "실패 했습니다.\n다시 시도해주세요."
 }

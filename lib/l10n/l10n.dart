@@ -6,7 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:flutter/widgets.dart';
-import 'package:user_feedback/l10n/arb/app_localizations.dart';
+import 'package:user_feedback/l10n/app_localizations.dart';
 
 
 extension AppLocalizationsX on BuildContext {
