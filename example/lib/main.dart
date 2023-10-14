@@ -2,6 +2,7 @@ import 'package:example/supabase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:user_feedback/l10n/app_localizations.dart';
 import 'package:user_feedback/user_feedback.dart';
 
 import 'env/env.dart';
@@ -65,14 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
       //   ),
       // ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: SafeArea(
-            child: FeedbackScreen(
-              appName: 'test',
-              feedbackService: SupabaseService(),
+        return Localizations(
+          locale: Locale('ko'),
+          delegates: AppLocalizations.localizationsDelegates,
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: SafeArea(
+              child: FeedbackScreen(
+                appName: 'test',
+                feedbackService: SupabaseService(),
+              ),
             ),
           ),
         );
