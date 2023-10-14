@@ -1,0 +1,4 @@
+enum FeedbackCategory {
+  enhancement,
+  bug;
+}
