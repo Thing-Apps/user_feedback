@@ -23,7 +23,7 @@ dependencies:
   json_serializable: ^6.7.1
   modal_bottom_sheet: ^3.0.0-pre
   path_provider: ^2.1.1
-  uuid: ^4.1.0
+  uuid: ^3.0.6
 
 dev_dependencies:
   build_runner: ^2.4.6
@@ -40,8 +40,8 @@ flutter:
     - assets/
 
 flutter_gen:
-#  output: lib/gen/ # Optional (default: lib/gen/)
-#  line_length: 80 # Optional (default: 80)
+  #  output: lib/gen/ # Optional (default: lib/gen/)
+  #  line_length: 80 # Optional (default: 80)
 
   # Optional
   integrations:
