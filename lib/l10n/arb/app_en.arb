@@ -28,5 +28,6 @@
   "bugButton" : "🚨 Report bug",
   "emptyBodyWarning" : "Please input text.",
   "complete" : "Complete",
-  "failWarning" : "Something went wrong.\nPlease try again."
+  "failWarning" : "Something went wrong.\nPlease try again.",
+  "selectCategoryWarning" : "Please, select category."
 }

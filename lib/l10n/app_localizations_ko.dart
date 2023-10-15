@@ -43,4 +43,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get failWarning => '실패 했습니다.\n다시 시도해주세요.';
+
+  @override
+  String get selectCategoryWarning => '카테고리를 선택 해주세요.';
 }

@@ -17,10 +17,10 @@ class SupabaseService extends FeedbackService {
     required List<File> fileList,
   }) async {
     var index = 0;
-    List<String> imageUrls = [];
+    final imageUrls = <String>[];
     for (final file in fileList) {
       const storage = 'feedbacks';
-      String fileExt = file.path.split('.').last;
+      final fileExt = file.path.split('.').last;
       await supabase.storage.from(storage).uploadBinary(
             '$path$index.$fileExt',
             await file.readAsBytes(),

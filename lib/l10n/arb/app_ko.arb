@@ -28,5 +28,6 @@
   "bugButton" : "🚨 오류 신고",
   "emptyBodyWarning" : "내용을 입력 해주세요.",
   "complete" : "완료",
-  "failWarning" : "실패 했습니다.\n다시 시도해주세요."
+  "failWarning" : "실패 했습니다.\n다시 시도해주세요.",
+  "selectCategoryWarning" : "카테고리를 선택 해주세요."
 }

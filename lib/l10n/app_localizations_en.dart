@@ -43,4 +43,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failWarning => 'Something went wrong.\nPlease try again.';
+
+  @override
+  String get selectCategoryWarning => 'Please, select category.';
 }

@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong.\nPlease try again.'**
   String get failWarning;
+
+  /// No description provided for @selectCategoryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Please, select category.'**
+  String get selectCategoryWarning;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

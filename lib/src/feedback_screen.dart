@@ -73,7 +73,7 @@ class FeedbackView extends StatefulWidget {
 class _FeedbackViewState extends State<FeedbackView> {
   final TextEditingController _textEditingController = TextEditingController();
 
-  FeedbackCategory selectedCategory = FeedbackCategory.bug;
+  FeedbackCategory? selectedCategory;
   List<XFile> imageFileList = [];
 
   static const maxImages = 5;
@@ -359,18 +359,25 @@ class _FeedbackViewState extends State<FeedbackView> {
         await Fluttertoast.showToast(msg: context.l10n.emptyBodyWarning);
         return;
       }
+
+      final category = selectedCategory;
+      if (category == null) {
+        await Fluttertoast.showToast(msg: context.l10n.selectCategoryWarning);
+        return;
+      }
+
       final fileList = imageFileList.map((e) => File(e.path)).toList();
 
       final feedback = AddUserFeedbackRequest(
         id: const Uuid().v4(),
         appName: widget.appName,
         body: body,
-        category: selectedCategory,
+        category: category,
         imageUrls: [],
       );
 
       final imageUrls = await widget.feedbackService.addFeedbackImages(
-        path: '${widget.appName}/${selectedCategory.name}/${feedback.id}/',
+        path: '${widget.appName}/${category.name}/${feedback.id}/',
         fileList: fileList,
       );
 
@@ -380,15 +387,17 @@ class _FeedbackViewState extends State<FeedbackView> {
         ),
       );
       await Fluttertoast.showToast(msg: context.l10n.complete);
+      widget.onSendFinish?.call(null);
+      Navigator.pop(context);
     } catch (e, st) {
       log('send feedback failed: $e, $st');
       await Fluttertoast.showToast(msg: context.l10n.failWarning);
+      widget.onSendFinish?.call(null);
+      Navigator.pop(context);
     } finally {
       setState(() {
         _isLoading = false;
       });
-      widget.onSendFinish?.call(null);
-      Navigator.pop(context);
     }
   }
 }
