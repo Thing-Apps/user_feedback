@@ -79,6 +79,7 @@ class _FeedbackViewState extends State<FeedbackView> {
   static const maxImages = 5;
 
   bool _isLoading = false;
+  String _errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +158,13 @@ class _FeedbackViewState extends State<FeedbackView> {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           height: 1.5,
                         ),
+                    onChanged: (input) {
+                      if (_errorMessage.isNotEmpty && input.isNotEmpty) {
+                        setState(() {
+                          _errorMessage = '';
+                        });
+                      }
+                    },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(16),
                       border: InputBorder.none,
@@ -178,7 +186,21 @@ class _FeedbackViewState extends State<FeedbackView> {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          if (_errorMessage.isEmpty) const SizedBox(height: 12),
+          if (_errorMessage.isNotEmpty)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  _errorMessage,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           if (imageFileList.isNotEmpty)
             buildImageListView()
           else
@@ -190,6 +212,7 @@ class _FeedbackViewState extends State<FeedbackView> {
               buildImageAddButton(),
               const Expanded(child: SizedBox()),
               RoundedButton(
+                onTap: _onSendTap,
                 child: Text(
                   context.l10n.sendButton,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -197,7 +220,6 @@ class _FeedbackViewState extends State<FeedbackView> {
                         color: Colors.white,
                       ),
                 ),
-                onTap: _onSendTap,
               ),
               const SizedBox(width: 16),
             ],
@@ -214,6 +236,7 @@ class _FeedbackViewState extends State<FeedbackView> {
         if (imageFileList.length == maxImages) {
           await Fluttertoast.showToast(
             msg: context.l10n.maxImagesWarning(maxImages),
+            gravity: ToastGravity.CENTER,
           );
           return;
         }
@@ -328,6 +351,7 @@ class _FeedbackViewState extends State<FeedbackView> {
       onTap: () {
         setState(() {
           selectedCategory = category;
+          _errorMessage = '';
         });
       },
       child: Container(
@@ -356,13 +380,25 @@ class _FeedbackViewState extends State<FeedbackView> {
 
       final body = _textEditingController.text.trim();
       if (body.isEmpty) {
-        await Fluttertoast.showToast(msg: context.l10n.emptyBodyWarning);
+        await Fluttertoast.showToast(
+          msg: context.l10n.emptyBodyWarning,
+          gravity: ToastGravity.CENTER,
+        );
+        setState(() {
+          _errorMessage = context.l10n.emptyBodyWarning;
+        });
         return;
       }
 
       final category = selectedCategory;
       if (category == null) {
-        await Fluttertoast.showToast(msg: context.l10n.selectCategoryWarning);
+        await Fluttertoast.showToast(
+          msg: context.l10n.selectCategoryWarning,
+          gravity: ToastGravity.CENTER,
+        );
+        setState(() {
+          _errorMessage = context.l10n.selectCategoryWarning;
+        });
         return;
       }
 
@@ -386,12 +422,18 @@ class _FeedbackViewState extends State<FeedbackView> {
           imageUrls: imageUrls,
         ),
       );
-      await Fluttertoast.showToast(msg: context.l10n.complete);
+      await Fluttertoast.showToast(
+        msg: context.l10n.complete,
+        gravity: ToastGravity.CENTER,
+      );
       widget.onSendFinish?.call(null);
       Navigator.pop(context);
     } catch (e, st) {
       log('send feedback failed: $e, $st');
-      await Fluttertoast.showToast(msg: context.l10n.failWarning);
+      await Fluttertoast.showToast(
+        msg: context.l10n.failWarning,
+        gravity: ToastGravity.CENTER,
+      );
       widget.onSendFinish?.call(null);
       Navigator.pop(context);
     } finally {
