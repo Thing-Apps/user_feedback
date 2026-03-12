@@ -21,24 +21,26 @@ abstract class _$AddUserFeedbackRequestCWProxy {
 
   AddUserFeedbackRequest username(String? username);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AddUserFeedbackRequest(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AddUserFeedbackRequest(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AddUserFeedbackRequest(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AddUserFeedbackRequest call({
-    String? id,
-    String? appName,
-    String? body,
-    FeedbackCategory? category,
-    List<String>? imageUrls,
+    String id,
+    String appName,
+    String body,
+    FeedbackCategory category,
+    List<String> imageUrls,
     String? userId,
     String? username,
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfAddUserFeedbackRequest.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfAddUserFeedbackRequest.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfAddUserFeedbackRequest.copyWith(...)` or call `instanceOfAddUserFeedbackRequest.copyWith.fieldName(value)` for a single field.
 class _$AddUserFeedbackRequestCWProxyImpl
     implements _$AddUserFeedbackRequestCWProxy {
   const _$AddUserFeedbackRequestCWProxyImpl(this._value);
@@ -46,36 +48,37 @@ class _$AddUserFeedbackRequestCWProxyImpl
   final AddUserFeedbackRequest _value;
 
   @override
-  AddUserFeedbackRequest id(String id) => this(id: id);
+  AddUserFeedbackRequest id(String id) => call(id: id);
 
   @override
-  AddUserFeedbackRequest appName(String appName) => this(appName: appName);
+  AddUserFeedbackRequest appName(String appName) => call(appName: appName);
 
   @override
-  AddUserFeedbackRequest body(String body) => this(body: body);
+  AddUserFeedbackRequest body(String body) => call(body: body);
 
   @override
   AddUserFeedbackRequest category(FeedbackCategory category) =>
-      this(category: category);
+      call(category: category);
 
   @override
   AddUserFeedbackRequest imageUrls(List<String> imageUrls) =>
-      this(imageUrls: imageUrls);
+      call(imageUrls: imageUrls);
 
   @override
-  AddUserFeedbackRequest userId(String? userId) => this(userId: userId);
+  AddUserFeedbackRequest userId(String? userId) => call(userId: userId);
 
   @override
-  AddUserFeedbackRequest username(String? username) => this(username: username);
+  AddUserFeedbackRequest username(String? username) => call(username: username);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AddUserFeedbackRequest(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AddUserFeedbackRequest(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AddUserFeedbackRequest(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AddUserFeedbackRequest call({
     Object? id = const $CopyWithPlaceholder(),
     Object? appName = const $CopyWithPlaceholder(),
@@ -119,7 +122,8 @@ class _$AddUserFeedbackRequestCWProxyImpl
 }
 
 extension $AddUserFeedbackRequestCopyWith on AddUserFeedbackRequest {
-  /// Returns a callable class that can be used as follows: `instanceOfAddUserFeedbackRequest.copyWith(...)` or like so:`instanceOfAddUserFeedbackRequest.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfAddUserFeedbackRequest.copyWith(...)` or `instanceOfAddUserFeedbackRequest.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$AddUserFeedbackRequestCWProxy get copyWith =>
       _$AddUserFeedbackRequestCWProxyImpl(this);
